@@ -1,0 +1,27 @@
+on:
+    release:
+        types: [created]
+permissions:
+    contents: write
+    packages: write
+
+jobs:
+    releases-matrix:
+      name: Release Go Binary
+      runs-on: ubuntu-latest
+      strategy:
+        matrix:
+          goos: [darwin]
+          goarch: [amd64, arm64]
+      steps:
+      - uses: actions/checkout@v4
+      - uses: wangyoucao577/go-release-action@v1.53
+        with:
+          github_token: ${{ github.token }}
+          goos: ${{ matrix.goos }}
+          goarch: ${{ matrix.goarch }}
+          build_flags: -trimpath
+          ldflags: -s -w -X 'main.Version=${{ github.event.release.tag_name }}'
+          overwrite: TRUE
+          asset_name: macos-please-${{ github.event.release.tag_name }}-${{ matrix.goos }}-${{ matrix.goarch }}
+          compress_assets: FALSE
