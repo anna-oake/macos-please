@@ -14,6 +14,8 @@ import (
 )
 
 func produceImage(installer mist.Installer, outPath string) error {
+	hdi.Detach("/Volumes/" + installer.ID) // sometimes mist doesn't clean up properly
+
 	log.Println("-- Creating a temporary directory")
 	tmp, err := os.MkdirTemp("", "macos-please")
 	if err != nil {
