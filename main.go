@@ -6,7 +6,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"github.com/anna-oake/macos-please/diskutil"
 	"github.com/anna-oake/macos-please/hdiutil"
@@ -43,7 +42,7 @@ func main() {
 	if err != nil {
 		log.Fatalln("diskutil init error:", err)
 	}
-	mi, err = mist.New(true, time.Hour)
+	mi, err = mist.New(args.MistCache, args.MistTimeout)
 	if err != nil {
 		log.Fatalln("mist init error:", err)
 	}
