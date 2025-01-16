@@ -8,7 +8,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/alexflint/go-arg"
 	"github.com/anna-oake/macos-please/diskutil"
 	"github.com/anna-oake/macos-please/hdiutil"
 	"github.com/anna-oake/macos-please/mist"
@@ -19,8 +18,7 @@ var du *diskutil.DiskUtil
 var mi *mist.Mist
 
 func main() {
-	var args args
-	arg.MustParse(&args)
+	args := parseArgs()
 
 	if os.Geteuid() != 0 {
 		log.Fatalln("Please run as root")

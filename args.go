@@ -1,6 +1,11 @@
 package main
 
-import "time"
+import (
+	"path/filepath"
+	"time"
+
+	"github.com/alexflint/go-arg"
+)
 
 var Version = "(dev)" // set at compile time
 
@@ -15,4 +20,22 @@ type args struct {
 
 func (args) Version() string {
 	return "macos-please " + Version
+}
+
+func parseArgs() args {
+	var args args
+	p := arg.MustParse(&args)
+	if args.MajorLimit < 0 {
+		p.Fail("-m/--major-limit must be non-negative")
+	}
+	if args.MistTimeout < 0 {
+		p.Fail("--mist-timeout must be non-negative")
+	}
+	if !filepath.IsAbs(args.OutputDir) {
+		p.Fail("-o/--output-dir must be an absolute path")
+	}
+	if ok, _ := pathExists(args.OutputDir); !ok {
+		p.Fail("output dir must exist")
+	}
+	return args
 }

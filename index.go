@@ -25,7 +25,11 @@ type Installer struct {
 
 func getIndexPath(outputDir string) (string, error) {
 	path := filepath.Join(outputDir, "index.json")
-	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
+	exists, err := pathExists(path)
+	if err != nil {
+		return "", err
+	}
+	if !exists {
 		err = os.WriteFile(path, []byte("[]"), 0644)
 		if err != nil {
 			return "", err
